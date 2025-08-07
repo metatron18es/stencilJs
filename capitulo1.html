@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 1 – Introducción a Stencil.js</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 1: Introducción y conceptos clave</h1>
+
+      <section>
+        <h2>¿Qué es Stencil.js?</h2>
+        <p>
+          Stencil.js es un compilador de componentes web desarrollado por el equipo de Ionic. A diferencia de frameworks
+          tradicionales, Stencil genera <strong>Web Components nativos</strong> compatibles con cualquier framework o
+          sin framework alguno.
+        </p>
+        <p>
+          Fue diseñado para ofrecer lo mejor de Angular, React y Vue, pero sin ataduras: <strong>ligero, veloz y
+            estándar</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Características principales</h2>
+        <ul>
+          <li>🧩 Componentes nativos basados en estándares</li>
+          <li>⚡️ Lazy loading y bundling automático</li>
+          <li>🛠 JSX + TypeScript</li>
+          <li>🎯 Compatibilidad con cualquier framework</li>
+          <li>🧪 Testing integrado con Jest</li>
+          <li>📦 Generación automática de documentación</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>¿Por qué usar Stencil.js?</h2>
+        <p>
+          A diferencia de librerías como React o Vue, los componentes creados con Stencil son interoperables. Puedes
+          usarlos en Angular, React, Vue, Svelte o incluso en una web HTML estática. Esto lo convierte en una excelente
+          elección para crear <strong>design systems, librerías compartidas o micro frontends</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2>Primer ejemplo de componente</h2>
+        <pre><code class="language-ts">
+<span class="comment">// src/components/mi-componente/mi-componente.tsx</span>
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'mi-componente'</span>,
+  styleUrl: <span class="string">'mi-componente.css'</span>,
+  shadow: <span class="keyword">true</span>
+})
+<span class="keyword">export class</span> <span class="class-name">MiComponente</span> {
+  <span class="decorator">@Prop</span>() <span class="variable">nombre</span>: <span class="type">string</span>;
+
+  render() {
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;p&gt;</span>Hola, {this.nombre}!<span class="tag">&lt;/p&gt;</span>
+    );
+  }
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Ventajas frente a otros frameworks</h2>
+        <ul>
+          <li>No requiere runtime en el navegador</li>
+          <li>Excelente para librerías y entornos compartidos</li>
+          <li>Optimización automática (tree-shaking, lazy load)</li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un nuevo componente llamado <code class="inline-code">&lt;saludo-personal&gt;</code> que reciba una propiedad
+          <code class="inline-code">nombre</code> y muestre un saludo personalizado. Prueba a integrarlo en una página HTML básica.
+        </p>
+        <p>
+          ¿Qué ocurre si no pasas la propiedad <code class="inline-code">nombre</code>? Añade lógica condicional.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+
+</html>

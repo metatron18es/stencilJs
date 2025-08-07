@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 8 – Integración con APIs</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 8: Integración con APIs</h1>
+
+      <section>
+        <h2>📡 ¿Por qué es importante?</h2>
+        <p>
+          Muchos componentes necesitan comunicarse con APIs para obtener datos dinámicos. En Stencil puedes usar <code class="inline-code">fetch</code> junto con <code class="inline-code">async/await</code> y <code class="inline-code">try/catch</code> para un manejo robusto.
+        </p>
+      </section>
+
+      <section>
+        <h2>🌐 Llamada con <code class="inline-code">fetch</code> y <code class="inline-code">async/await</code></h2>
+        <pre><code class="language-ts">
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'usuario-random'</span>,
+  styleUrl: <span class="string">'usuario-random.css'</span>,
+  shadow: <span class="keyword">true</span>
+})
+<span class="keyword">export class</span> <span class="class-name">UsuarioRandom</span> {
+  <span class="decorator">@State</span>() <span class="variable">usuario</span>: <span class="type">any</span> = <span class="keyword">null</span>;
+  <span class="decorator">@State</span>() <span class="variable">error</span>: <span class="type">string</span> = <span class="string">''</span>;
+
+  <span class="function">async componentWillLoad</span>() {
+    <span class="keyword">try</span> {
+      <span class="keyword">const</span> resp = <span class="keyword">await</span> fetch(<span class="string">'https://randomuser.me/api/'</span>);
+      <span class="keyword">if</span> (!resp.ok) {
+        <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Error al cargar usuario'</span>);
+      }
+      <span class="keyword">const</span> data = <span class="keyword">await</span> resp.json();
+      <span class="keyword">this</span>.usuario = data.results[0];
+    } <span class="keyword">catch</span> (err) {
+      <span class="keyword">this</span>.error = <span class="keyword">err</span>.message;
+    }
+  }
+
+  render() {
+    <span class="keyword">if</span> (this.error) {
+      <span class="keyword">return</span> <span class="tag">&lt;p&gt;</span>Error: {this.error}<span class="tag">&lt;/p&gt;</span>;
+    }
+
+    <span class="keyword">if</span> (!this.usuario) {
+      <span class="keyword">return</span> <span class="tag">&lt;p&gt;</span>Cargando...<span class="tag">&lt;/p&gt;</span>;
+    }
+
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;h3&gt;</span>{this.usuario.name.first} {this.usuario.name.last}<span class="tag">&lt;/h3&gt;</span>
+        <span class="tag">&lt;img</span> <span class="attr-name">src</span>=<span class="string">{this.usuario.picture.medium}</span> <span class="attr-name">alt</span>=<span class="string">"avatar"</span> <span class="tag">/&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    );
+  }
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🖱️ Petición desde un evento</h2>
+        <p>Puedes hacer una petición al hacer clic en un botón:</p>
+        <pre><code class="language-tsx">
+<span class="function">async buscarOtro()</span> {
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(<span class="string">'https://randomuser.me/api/'</span>);
+    <span class="keyword">const</span> data = <span class="keyword">await</span> res.json();
+    <span class="keyword">this</span>.usuario = data.results[0];
+  } <span class="keyword">catch</span> (e) {
+    <span class="keyword">this</span>.error = <span class="string">'No se pudo obtener un nuevo usuario.'</span>;
+  }
+}
+
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;button</span> <span class="attr-name">onClick</span>=<span class="string">{() =&gt; this.buscarOtro()}</span><span class="tag">&gt;</span>Cargar otro<span class="tag">&lt;/button&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>📁 Llamadas a APIs locales</h2>
+        <p>
+          Puedes usar rutas como <code class="inline-code">/api/productos</code> para conectarte con tu propio backend.
+        </p>
+        <p>
+          Si el frontend y backend están separados, asegúrate de que el servidor permita <strong>CORS</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2>✅ Buenas prácticas</h2>
+        <ul>
+          <li>Haz la petición en <code class="inline-code">componentWillLoad()</code> o en una función llamada desde eventos.</li>
+          <li>Siempre usa <code class="inline-code">try/catch</code> para capturar errores y mostrar mensajes adecuados.</li>
+          <li>Guarda los datos en <code class="inline-code">@State()</code> para forzar re-renderizado.</li>
+          <li>No hagas peticiones dentro de <code class="inline-code">render()</code>.</li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>Crea un componente <code class="inline-code">&lt;buscador-libros&gt;</code> que:</p>
+        <ul>
+          <li>Tenga un input para buscar por título</li>
+          <li>Haga una petición a <code class="inline-code">https://openlibrary.org/search.json?q=</code></li>
+          <li>Use <code class="inline-code">@State()</code> para guardar los resultados</li>
+          <li>Muestre los títulos encontrados</li>
+          <li>Maneje errores con <code class="inline-code">try/catch</code></li>
+        </ul>
+        <p>
+          Opcional: Muestra un loader animado mientras busca resultados.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+</html>

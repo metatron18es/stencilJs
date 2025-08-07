@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 3 – Estructura de un componente</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 3: Estructura de un componente</h1>
+
+      <section>
+        <h2>¿Qué es un componente en Stencil?</h2>
+        <p>
+          Un componente en Stencil.js es una clase TypeScript decorada con <code class="inline-code">@Component</code>
+          que define cómo se representa
+          y se comporta un elemento personalizado del DOM.
+        </p>
+      </section>
+
+      <section>
+        <h2>Archivos clave del componente</h2>
+        <p>
+          Cada componente suele tener su propia carpeta dentro de <code class="inline-code">src/components</code> y
+          contiene:
+        </p>
+        <ul>
+          <li><strong>.tsx</strong>: lógica y estructura del componente</li>
+          <li><strong>.css</strong>: estilos asociados</li>
+          <li>(Opcional) archivo de pruebas <code class="inline-code">.spec.ts</code></li>
+        </ul>
+        <pre><code class="language-bash">
+mi-proyecto/
+└── src/
+    └── components/
+        └── saludo-personal/
+            ├── saludo-personal.tsx
+            ├── saludo-personal.css
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Ejemplo completo de componente</h2>
+        <pre><code class="language-ts">
+<span class="comment">// saludo-personal.tsx</span>
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'saludo-personal'</span>,
+  styleUrl: <span class="string">'saludo-personal.css'</span>,
+  shadow: <span class="keyword">true</span>,
+})
+<span class="keyword">export class</span> <span class="class-name">SaludoPersonal</span> {
+  <span class="decorator">@Prop</span>() <span class="variable">nombre</span>: <span class="type">string</span> = <span class="string">'visitante'</span>;
+
+  render() {
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;h2&gt;</span>Hola, {this.nombre}!<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    );
+  }
+}
+        </code></pre>
+        <p>Este componente renderiza un saludo personalizado usando una propiedad <code
+            class="inline-code">nombre</code>.</p>
+      </section>
+
+      <section>
+        <h2>Explicación de partes clave</h2>
+        <ul>
+          <li><code class="inline-code">@Component</code>: Define el metadato del componente (nombre, estilos, shadow
+            DOM).</li>
+          <li><code class="inline-code">@Prop()</code>: Define una propiedad pública que puede pasarse desde el HTML.
+          </li>
+          <li><code class="inline-code">render()</code>: Devuelve el JSX a renderizar en el DOM.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Estilos asociados</h2>
+        <p>
+          Puedes crear un archivo <code class="inline-code">.css</code> junto al componente para aplicarle estilos
+          locales (scoped):
+        </p>
+        <pre><code class="language-css">
+<span class="comment">/* saludo-personal.css */</span>
+h2 {
+  color: #00796b;
+  font-family: 'Segoe UI', sans-serif;
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Uso en HTML</h2>
+        <p>
+          Para utilizar el componente, simplemente inclúyelo en tu <code class="inline-code">index.html</code>:
+        </p>
+        <pre><code class="language-html">
+<span class="tag">&lt;script</span> <span class="attr-name">type</span>=<span class="string">"module"</span> <span class="attr-name">src</span>=<span class="string">"/build/mi-libreria.esm.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;saludo-personal</span> <span class="attr-name">nombre</span>=<span class="string">"Roberto"</span><span class="tag">&gt;&lt;/saludo-personal&gt;</span>
+        </code></pre>
+        <p>
+          El script importa tu bundle generado y registra el componente en el navegador.
+        </p>
+      </section>
+      <section>
+        <h2>Generar la build</h2>
+        <p>
+          Para poder utilizar los componentes fuera del entorno de desarrollo (por ejemplo, desde un <code
+            class="inline-code">index.html</code> externo),
+          necesitas compilar el proyecto con el siguiente comando:
+        </p>
+        <pre><code class="language-bash">
+npm run build
+  </code></pre>
+        <p>
+          Esto generará los archivos finales dentro de la carpeta <code class="inline-code">www/build</code> o <code
+            class="inline-code">dist/</code> (según el <code class="inline-code">outputTargets</code> definidos en <code
+            class="inline-code">stencil.config.ts</code>).
+        </p>
+        <p>
+          Si tu salida contiene <code class="inline-code">www</code>, podrás probar directamente desde un navegador
+          abriendo <code class="inline-code">www/index.html</code>.
+        </p>
+        <p>
+          En caso de estar usando como librería externa, puedes copiar el contenido de <code
+            class="inline-code">dist</code> o <code class="inline-code">build</code> y usarlo con un script tipo:
+        </p>
+        <pre><code class="language-html">
+<span class="tag">&lt;script</span> <span class="attr-name">type</span>=<span class="string">"module"</span> <span class="attr-name">src</span>=<span class="string">"/build/mi-libreria.esm.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;saludo-personal</span> <span class="attr-name">nombre</span>=<span class="string">"Stencil"</span><span class="tag">&gt;&lt;/saludo-personal&gt;</span>
+  </code></pre>
+        <p>
+          Si todo está bien configurado, tu componente funcionará como un elemento HTML personalizado nativo.
+        </p>
+      </section>
+
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>Crea un componente llamado <code class="inline-code">&lt;tarjeta-contacto&gt;</code> con la siguiente
+          estructura:</p>
+        <ul>
+          <li>Una propiedad <code class="inline-code">nombre</code></li>
+          <li>Una propiedad <code class="inline-code">email</code></li>
+          <li>Un diseño básico en CSS que muestre ambos campos en una tarjeta</li>
+        </ul>
+        <p>
+          Prueba a usarlo desde <code class="inline-code">index.html</code> y comprueba cómo se renderiza el contenido.
+          Añade estilos personalizados.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+
+</html>

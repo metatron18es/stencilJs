@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 6 – Slots y Shadow DOM</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 6: Slots y Shadow DOM</h1>
+
+      <section>
+        <h2>¿Qué es el Shadow DOM?</h2>
+        <p>
+          El <strong>Shadow DOM</strong> es una especificación de los Web Components que permite encapsular el contenido
+          de un componente.
+        </p>
+        <p>
+          Esto significa que los estilos y el DOM interno del componente no afectan ni son afectados por el resto del
+          documento.
+        </p>
+        <p>
+          En Stencil, se activa añadiendo <code class="inline-code">shadow: true</code> en el decorador <code
+            class="inline-code">@Component</code>:
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'mi-componente'</span>,
+  styleUrl: <span class="string">'mi-componente.css'</span>,
+  shadow: <span class="keyword">true</span>
+})
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>¿Qué es un slot?</h2>
+        <p>
+          Un <code class="inline-code">&lt;slot&gt;</code> es un marcador de posición dentro del componente que permite
+          insertar contenido desde el exterior.
+        </p>
+        <p>
+          Es similar a pasar contenido dinámico o a una plantilla.
+        </p>
+        <pre><code class="language-tsx">
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;slot&gt;&lt;/slot&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+        </code></pre>
+        <p>
+          Y se usaría así:
+        </p>
+        <pre><code class="language-html">
+<span class="tag">&lt;mi-componente&gt;</span>
+  <span class="tag">&lt;p&gt;</span>Este contenido se inserta dentro del slot<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/mi-componente&gt;</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Slots con nombre</h2>
+        <p>
+          Puedes tener múltiples <code class="inline-code">slot</code> y nombrarlos para mayor control:
+        </p>
+        <pre><code class="language-tsx">
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;slot</span> <span class="attr-name">name</span>=<span class="string">"titulo"</span><span class="tag">&gt;&lt;/slot&gt;</span>
+      <span class="tag">&lt;slot</span> <span class="attr-name">name</span>=<span class="string">"contenido"</span><span class="tag">&gt;&lt;/slot&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+        </code></pre>
+        <p>Y usarlos así:</p>
+        <pre><code class="language-html">
+<span class="tag">&lt;mi-componente&gt;</span>
+  <span class="tag">&lt;h1</span> <span class="attr-name">slot</span>=<span class="string">"titulo"</span><span class="tag">&gt;</span>Título aquí<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;p</span> <span class="attr-name">slot</span>=<span class="string">"contenido"</span><span class="tag">&gt;</span>Contenido dinámico<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;/mi-componente&gt;</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Slots por defecto</h2>
+        <p>
+          Si un slot no tiene atributo <code class="inline-code">name</code>, se considera el slot por defecto.
+        </p>
+        <p>
+          Todo contenido que no indique explícitamente un <code class="inline-code">slot</code> irá al slot por defecto.
+        </p>
+      </section>
+
+      <section>
+        <h2>Estilos y Shadow DOM</h2>
+        <p>
+          Cuando un componente usa <code class="inline-code">shadow: true</code>, sus estilos se encapsulan dentro del
+          <strong>Shadow DOM</strong>.
+        </p>
+        <p>
+          Esto significa que:
+        </p>
+        <ul>
+          <li>Los estilos definidos en su <code class="inline-code">styleUrl</code> solo afectan al contenido interno
+            del componente.</li>
+          <li>Los estilos globales (como clases de Bootstrap o Tailwind) <strong>no aplican</strong> dentro del Shadow
+            DOM, a menos que se importen explícitamente.</li>
+          <li>El contenido sloteado (<code class="inline-code">&lt;slot&gt;</code>) puede mantener sus propios estilos
+            si vienen desde el HTML exterior.</li>
+        </ul>
+
+        <h3>🎨 ¿Cómo aplicar estilos globales dentro del Shadow DOM?</h3>
+        <p>
+          Para que un componente con Shadow DOM utilice estilos globales, tienes dos opciones:
+        </p>
+
+        <h4>1. Importar CSS en línea con <code class="inline-code">import</code></h4>
+        <pre><code class="language-ts">
+<span class="comment">// mi-componente.tsx</span>
+<span class="keyword">import</span> <span class="variable">globalStyles</span> <span class="keyword">from</span> <span class="string">'../../global/global.css'</span>;
+
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'mi-componente'</span>,
+  styleUrl: <span class="string">'mi-componente.css'</span>,
+  shadow: <span class="keyword">true</span>
+})
+        </code></pre>
+
+        <h4>2. Usar <code class="inline-code">styleUrls</code> múltiples o preprocesadores</h4>
+        <p>
+          Puedes combinar varios archivos CSS/SCSS usando la propiedad <code class="inline-code">styleUrls</code> o usar
+          Sass para importar estilos comunes en todos tus componentes.
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'boton-global'</span>,
+  styleUrls: [
+    <span class="string">'../../global/base.css'</span>,
+    <span class="string">'boton-global.css'</span>
+  ],
+  shadow: <span class="keyword">true</span>
+})
+        </code></pre>
+
+        <h3>🔒 ¿Y si quiero que un componente use clases externas?</h3>
+        <p>
+          Si quieres usar estilos de frameworks externos como Tailwind o Bootstrap y que se apliquen directamente al
+          contenido, considera:
+        </p>
+        <ul>
+          <li>Desactivar Shadow DOM (<code class="inline-code">shadow: false</code>)</li>
+          <li>O inyectar las clases necesarias directamente dentro del Shadow DOM, lo cual es más complejo</li>
+        </ul>
+
+        <h3>🧪 Consejo</h3>
+        <p>
+          Puedes inspeccionar el encapsulamiento visual de los estilos activando el panel <strong>“Shadow DOM”</strong>
+          en las herramientas de desarrollo de Chrome o Firefox.
+        </p>
+      </section>
+
+
+      <section>
+        <h2>Cuando no usar Shadow DOM</h2>
+        <p>
+          Si necesitas que los estilos externos (como Bootstrap o Tailwind) afecten a tu componente, puedes desactivar
+          el Shadow DOM:
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'mi-componente'</span>,
+  shadow: <span class="keyword">false</span>
+})
+        </code></pre>
+        <p>
+          En este caso, el componente se renderiza en el DOM global y no tendrá encapsulamiento.
+        </p>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un componente llamado <code class="inline-code">&lt;tarjeta-slot&gt;</code> que:
+        </p>
+        <ul>
+          <li>Utilice <code class="inline-code">shadow: true</code></li>
+          <li>Tenga un slot por defecto y uno con nombre <code class="inline-code">"footer"</code></li>
+          <li>Estiliza el contenido con bordes y fondo distinto</li>
+          <li>Prueba a usarlo desde <code class="inline-code">index.html</code> insertando un <code
+              class="inline-code">&lt;p&gt;</code> y un <code class="inline-code">&lt;button&gt;</code> en el footer
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+
+</html>

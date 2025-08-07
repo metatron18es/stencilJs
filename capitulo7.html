@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 7 – Comunicación entre componentes</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 7: Comunicación entre componentes</h1>
+
+      <section>
+        <h2>Tipos de comunicación</h2>
+        <p>Stencil permite varios mecanismos para que los componentes interactúen entre sí:</p>
+        <ul>
+          <li><strong>De padre a hijo:</strong> usando <code class="inline-code">@Prop()</code>.</li>
+          <li><strong>De hijo a padre:</strong> usando <code class="inline-code">@Event()</code>.</li>
+          <li><strong>Acceso directo:</strong> a través de referencias DOM y <code class="inline-code">@Method()</code>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Padre → Hijo con <code class="inline-code">@Prop()</code></h2>
+        <p>
+          El componente padre puede pasar datos al hijo usando propiedades decoradas con <code
+            class="inline-code">@Prop()</code>. Dependiendo de si estás escribiendo HTML estático o JSX dentro de otro
+          componente, el comportamiento es distinto.
+        </p>
+
+        <h3>📄 1. Desde HTML estático</h3>
+        <p>
+          Si usas un componente desde <code class="inline-code">index.html</code> o cualquier HTML plano, solo puedes
+          pasar <strong>strings</strong> o <strong>atributos booleanos simples</strong>.
+        </p>
+
+        <h4>✔️ Strings</h4>
+        <pre><code class="language-html">
+<span class="tag">&lt;saludo-usuario</span> <span class="attr-name">nombre</span>=<span class="string">"Roberto"</span><span class="tag">&gt;&lt;/saludo-usuario&gt;</span>
+  </code></pre>
+
+        <pre><code class="language-ts">
+<span class="decorator">@Prop</span>() <span class="variable">nombre</span>: <span class="type">string</span>;
+  </code></pre>
+
+        <h4>✔️ Booleanos (por presencia)</h4>
+        <pre><code class="language-html">
+<span class="tag">&lt;boton-toggle</span> <span class="attr-name">activo</span><span class="tag">&gt;&lt;/boton-toggle&gt;</span>
+  </code></pre>
+
+        <pre><code class="language-ts">
+<span class="decorator">@Prop</span>() <span class="variable">activo</span>: <span class="type">boolean</span>;
+  </code></pre>
+        <p>
+          ⚠️ Si haces <code class="inline-code">activo="false"</code>, se interpreta como string y <strong>no se
+            convierte automáticamente</strong> en booleano. Esto puede provocar errores.
+        </p>
+
+        <h4>⚠️ Limitación: objetos y funciones</h4>
+        <p>
+          HTML plano <strong>no permite pasar objetos ni funciones</strong> como atributos. Si necesitas pasar un
+          objeto, debes hacerlo desde JavaScript directamente:
+        </p>
+
+        <pre><code class="language-js">
+const comp = document.querySelector('usuario-detalle');
+comp.datos = { nombre: 'Ana', edad: 30 };
+  </code></pre>
+
+        <pre><code class="language-ts">
+<span class="decorator">@Prop</span>() <span class="variable">datos</span>: <span class="type">{ nombre: string; edad: number }</span>;
+  </code></pre>
+      </section>
+
+      <section>
+        <h3>⚛️ 2. Desde JSX (dentro de otro componente)</h3>
+        <p>
+          Si estás dentro de un componente Stencil y usas JSX (dentro del <code class="inline-code">render()</code>),
+          puedes pasar cualquier tipo de dato directamente: strings, booleanos, objetos, funciones…
+        </p>
+
+        <pre><code class="language-tsx">
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;tarjeta-contacto</span>
+      <span class="attr-name">nombre</span>=<span class="string">"Luis"</span>
+      <span class="attr-name">activo</span>=<span class="keyword">{true}</span>
+      <span class="attr-name">datos</span>=<span class="keyword">{{ email: 'luis@correo.com', ciudad: 'Sevilla' }}</span>
+      <span class="attr-name">onClick</span>=<span class="keyword">{() =&gt; this.saludar()}</span>
+    <span class="tag">/&gt;</span>
+  );
+}
+  </code></pre>
+
+        <p>
+          Esto es posible porque JSX interpreta los valores como código JavaScript. Es la forma más flexible y
+          recomendada cuando compones componentes entre sí.
+        </p>
+      </section>
+
+      <section>
+        <h3>🚫 ¿Y <code class="inline-code">.prop</code> o <code class="inline-code">?prop</code>?</h3>
+        <p>
+          Sintaxis como <code class="inline-code">.objeto=${objeto}</code> o <code
+            class="inline-code">?activo=${true}</code> es específica de <strong>Lit</strong> y no es válida en HTML
+          estático ni en JSX.
+        </p>
+        <p>
+          En Stencil simplemente usas <code class="inline-code">prop={valor}</code> dentro del JSX, sin prefijos
+          especiales.
+        </p>
+      </section>
+
+
+
+      <section>
+        <h2>Hijo → Padre con <code class="inline-code">@Event()</code></h2>
+        <p>
+          El componente hijo puede emitir un evento para notificar al padre:
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Event</span>() <span class="variable">onSeleccionar</span>: <span class="type">EventEmitter&lt;string&gt;</span>;
+
+<span class="function">seleccionar</span>(<span class="variable">valor</span>: <span class="type">string</span>) {
+  <span class="keyword">this</span>.onSeleccionar.emit(valor);
+}
+        </code></pre>
+        <p>El padre puede escucharlo así:</p>
+        <pre><code class="language-html">
+<span class="tag">&lt;selector-idioma</span> <span class="attr-name">onSeleccionar</span>=<span class="string">"idiomaElegido($event)"</span><span class="tag">&gt;&lt;/selector-idioma&gt;</span>
+        </code></pre>
+        <p>
+          En JS:
+        </p>
+        <pre><code class="language-js">
+<span class="keyword">function</span> <span class="function">idiomaElegido</span>(<span class="variable">e</span>) {
+  <span class="function">console</span>.log(<span class="string">'Idioma seleccionado:'</span>, e.detail);
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Acceso mediante <code class="inline-code">@Method()</code></h2>
+        <p>
+          Puedes exponer funciones públicas en un componente hijo para que el padre las invoque:
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Method</span>()
+<span class="keyword">async</span> <span class="function">recargar</span>() {
+  <span class="function">console</span>.log(<span class="string">'Recargando...'</span>);
+}
+        </code></pre>
+        <p>
+          En el padre:
+        </p>
+        <pre><code class="language-js">
+<span class="keyword">const</span> comp = document.querySelector(<span class="string">'mi-componente'</span>);
+<span class="keyword">await</span> comp.recargar();
+        </code></pre>
+        <p>
+          Esto solo funciona cuando el componente ya está cargado. Puedes usar <code
+            class="inline-code">componentDidLoad()</code> para asegurarlo.
+        </p>
+      </section>
+
+      <section>
+        <h2>Usar slots con eventos</h2>
+        <p>
+          También puedes comunicarte usando <code class="inline-code">&lt;slot&gt;</code> y que el contenido sloteado
+          emita eventos que el componente padre escuche.
+        </p>
+        <p>
+          Es útil en componentes que actúan como contenedores genéricos.
+        </p>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un componente <code class="inline-code">&lt;selector-color&gt;</code> que:
+        </p>
+        <ul>
+          <li>Tenga una lista de colores que renderiza como botones</li>
+          <li>Emita un evento <code class="inline-code">onColorSeleccionado</code> al hacer clic</li>
+        </ul>
+        <p>
+          Luego crea un componente <code class="inline-code">&lt;vista-color&gt;</code> que:
+        </p>
+        <ul>
+          <li>Reciba el color por <code class="inline-code">@Prop()</code></li>
+          <li>Muestre el color de fondo con CSS dinámico</li>
+        </ul>
+        <p>
+          Integra ambos en una página HTML para ver cómo se comunican.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+
+</html>

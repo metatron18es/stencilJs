@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 5 – Ciclo de vida</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 5: Ciclo de vida</h1>
+
+      <section>
+        <h2>¿Qué es el ciclo de vida de un componente?</h2>
+        <p>
+          En Stencil.js, el ciclo de vida se refiere a las distintas etapas por las que pasa un componente desde que se crea hasta que se elimina del DOM.
+        </p>
+        <p>
+          Durante este ciclo, puedes ejecutar lógica personalizada en momentos clave como antes de cargar, después de montar o cuando cambia una propiedad.
+        </p>
+      </section>
+
+      <section>
+        <h2>Métodos del ciclo de vida</h2>
+        <ul>
+          <li><code class="inline-code">componentWillLoad()</code>: se llama <strong>antes de que el componente se renderice</strong> por primera vez.</li>
+          <li><code class="inline-code">componentDidLoad()</code>: se ejecuta <strong>después de que el componente se haya renderizado</strong>.</li>
+          <li><code class="inline-code">componentWillUpdate()</code>: se invoca <strong>antes de una actualización</strong> del componente (por cambio de props o estado).</li>
+          <li><code class="inline-code">componentDidUpdate()</code>: se llama <strong>tras una actualización</strong> del componente.</li>
+          <li><code class="inline-code">disconnectedCallback()</code>: se ejecuta <strong>cuando el componente se elimina del DOM</strong>.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Ejemplo completo</h2>
+        <p>
+          Veamos un componente que implementa todos los métodos del ciclo de vida:
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Component</span>({
+  tag: <span class="string">'ciclo-ejemplo'</span>,
+  styleUrl: <span class="string">'ciclo-ejemplo.css'</span>,
+  shadow: <span class="keyword">true</span>,
+})
+<span class="keyword">export class</span> <span class="class-name">CicloEjemplo</span> {
+  <span class="decorator">@State</span>() <span class="variable">contador</span>: <span class="type">number</span> = <span class="number">0</span>;
+
+  <span class="function">componentWillLoad</span>() {
+    <span class="function">console</span>.log(<span class="string">'⏳ Antes de renderizar'</span>);
+  }
+
+  <span class="function">componentDidLoad</span>() {
+    <span class="function">console</span>.log(<span class="string">'✅ Componente renderizado'</span>);
+  }
+
+  <span class="function">componentWillUpdate</span>() {
+    <span class="function">console</span>.log(<span class="string">'🔁 Antes de actualizar'</span>);
+  }
+
+  <span class="function">componentDidUpdate</span>() {
+    <span class="function">console</span>.log(<span class="string">'🔄 Después de actualizar'</span>);
+  }
+
+  <span class="function">disconnectedCallback</span>() {
+    <span class="function">console</span>.log(<span class="string">'🗑️ Componente eliminado'</span>);
+  }
+
+  <span class="function">incrementar</span>() {
+    <span class="keyword">this</span>.contador++;
+  }
+
+  render() {
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Contador: {this.contador}<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;button</span> <span class="attr-name">onClick</span>=<span class="string">{() =&gt; this.incrementar()}</span><span class="tag">&gt;</span>Incrementar<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    );
+  }
+}
+        </code></pre>
+        <p>
+          Puedes observar los mensajes en consola al cargar, actualizar o eliminar el componente del DOM.
+        </p>
+      </section>
+
+      <section>
+        <h2>Consejos de uso</h2>
+        <ul>
+          <li>
+            Usa <code class="inline-code">componentWillLoad()</code> para cargar datos o inicializar valores antes de renderizar.
+          </li>
+          <li>
+            Usa <code class="inline-code">componentDidLoad()</code> para trabajar con el DOM o iniciar listeners.
+          </li>
+          <li>
+            Usa <code class="inline-code">disconnectedCallback()</code> para limpiar intervalos, observers o eventos globales.
+          </li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un componente llamado <code class="inline-code">&lt;temporizador-reloj&gt;</code> que:
+        </p>
+        <ul>
+          <li>Inicie un temporizador al cargarse (usando <code class="inline-code">componentDidLoad()</code>).</li>
+          <li>Muestre la hora actual cada segundo.</li>
+          <li>Detenga el temporizador cuando el componente se elimine del DOM (usando <code class="inline-code">disconnectedCallback()</code>).</li>
+        </ul>
+        <p>
+          Pista: usa <code class="inline-code">setInterval()</code> y <code class="inline-code">clearInterval()</code>.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+</html>

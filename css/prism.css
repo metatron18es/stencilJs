@@ -1,0 +1,120 @@
+/* prism.css mejorado */
+
+pre {
+  background: #2d2d2d;
+  color: #ccc;
+  padding: 1em;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 0.95em;
+  line-height: 1.4em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: inset 0 0 10px #000000cc;
+}
+
+/* Comentarios */
+.comment {
+  color: #999988;
+  font-style: italic;
+}
+
+/* Decoradores (@) */
+.decorator {
+  color: #bb55ff;
+  font-weight: bold;
+}
+
+/* Palabras clave TS/JS */
+.keyword {
+  color: #cc99cd;
+  font-weight: bold;
+}
+
+/* Strings */
+.string,
+.attr-value {
+  color: #6ad28e;
+  font-weight: 600;
+}
+
+/* Números */
+.number {
+  color: #f08d49;
+}
+
+/* Funciones */
+.function {
+  color: #4ea3f1;
+  font-weight: 600;
+}
+
+/* Clases y tipos */
+.class-name,
+.type {
+  color: #f2777a;
+  font-weight: 600;
+}
+
+/* Variables */
+.variable {
+  color: #f99157;
+}
+
+/* JSX Tags */
+.tag {
+  color: #ff7373;
+  font-weight: 700;
+  text-shadow: 0 0 2px #ff5050;
+}
+
+/* JSX Atributos */
+.attr-name {
+  color: #ffd580;
+  font-weight: 700;
+}
+
+/* Operadores */
+.operator {
+  color: #67cdcc;
+}
+
+/* Bloques inline <code> */
+code {
+  padding: 0 4px;
+  border-radius: 3px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 0.9em;
+  color: #fff;
+}
+
+/* Cuerpo y títulos (igual que antes) */
+body {
+  font-family: Arial, sans-serif;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  line-height: 1.6;
+  background: #fafafa;
+  color: #222;
+}
+h1, h2, h3 {
+  color: #00539c;
+}
+section {
+  margin-bottom: 40px;
+}
+.exercise {
+  background: #d0f0d9;
+  border-left: 6px solid #4caf50;
+  padding: 20px;
+  margin-top: 20px;
+}
+ul {
+  margin-left: 20px;
+}
+
+.inline-code {
+  color: #f08d49;
+}

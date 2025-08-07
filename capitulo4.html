@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 4 – Decoradores en profundidad</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 4: Decoradores en profundidad</h1>
+
+      <section>
+        <h2>¿Qué son los decoradores?</h2>
+        <p>
+          Los <strong>decoradores</strong> en Stencil.js son funciones especiales que se colocan sobre clases, propiedades o métodos
+          para añadirles comportamientos específicos. Internamente, son una característica avanzada de TypeScript.
+        </p>
+      </section>
+
+      <section>
+        <h2><code class="inline-code">@Prop()</code></h2>
+        <p>
+          Se usa para exponer una propiedad pública que puede pasarse al componente desde el HTML.
+        </p>
+        <pre><code class="language-ts">
+      <span class="decorator">@Prop</span>() <span class="variable">nombre</span>: <span class="type">string</span>;
+        </code></pre>
+        <p>
+          También puedes configurarla con opciones adicionales:
+        </p>
+        <pre><code class="language-ts">
+      <span class="decorator">@Prop</span>({ reflect: <span class="keyword">true</span>, mutable: <span class="keyword">true</span> })
+      <span class="variable">nivel</span>: <span class="type">number</span> = <span class="number">1</span>;
+        </code></pre>
+
+        <h3>🧩 ¿Qué hace <code class="inline-code">reflect</code>?</h3>
+        <p>
+          Si estableces <code class="inline-code">reflect: true</code>, cualquier cambio en la propiedad también actualizará el atributo HTML correspondiente del componente.
+        </p>
+        <p>
+          Por ejemplo, si <code class="inline-code">nivel</code> cambia internamente a 5, también se reflejará en el DOM como:
+          <code class="inline-code">&lt;mi-componente nivel="5"&gt;</code>
+        </p>
+        <p>
+          Es útil si quieres que el estado del componente sea visible o manipulable desde herramientas externas o estilos basados en atributos.
+        </p>
+
+        <h3>🔄 ¿Y <code class="inline-code">mutable</code>?</h3>
+        <p>
+          Por defecto, las propiedades marcadas con <code class="inline-code">@Prop()</code> son de solo lectura dentro del componente. Si necesitas modificar su valor desde el propio componente, añade <code class="inline-code">mutable: true</code>.
+        </p>
+        <p>
+          ⚠️ Úsalo con cuidado: si una propiedad puede cambiar internamente, asegúrate de que el componente esté preparado para esos cambios.
+        </p>
+      </section>
+
+
+      <section>
+        <h2><code class="inline-code">@State()</code></h2>
+        <p>
+          Define una propiedad interna reactiva. Si su valor cambia, el componente se vuelve a renderizar automáticamente.
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@State</span>() <span class="variable">contador</span>: <span class="type">number</span> = <span class="number">0</span>;
+        </code></pre>
+        <p>
+          Esta propiedad <strong>no es accesible desde fuera del componente</strong>.
+        </p>
+      </section>
+
+      <section>
+        <h2><code class="inline-code">@Event()</code></h2>
+        <p>
+          Se utiliza para emitir eventos personalizados desde el componente hacia el exterior (por ejemplo, al DOM o a otro componente).
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Event</span>() <span class="variable">onLike</span>: <span class="type">EventEmitter&lt;void&gt;</span>;
+
+<span class="function">emitirEvento</span>() {
+  <span class="keyword">this</span>.onLike.emit();
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2><code class="inline-code">@Method()</code></h2>
+        <p>
+          Expone métodos públicos que pueden llamarse desde el DOM mediante JavaScript.
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Method</span>()
+<span class="keyword">async</span> <span class="function">resetear</span>() {
+  <span class="keyword">this</span>.contador = <span class="number">0</span>;
+}
+        </code></pre>
+        <p>
+          En el navegador, puedes acceder así:
+        </p>
+        <pre><code class="language-js">
+document.querySelector(<span class="string">'mi-componente'</span>).resetear();
+        </code></pre>
+      </section>
+
+      <section>
+        <h2><code class="inline-code">@Watch()</code></h2>
+        <p>
+          Escucha cambios en una propiedad y ejecuta un método cuando detecta una modificación.
+        </p>
+        <pre><code class="language-ts">
+<span class="decorator">@Watch</span>(<span class="string">'nombre'</span>)
+<span class="function">cambioDeNombre</span>(<span class="variable">nuevoValor</span>: <span class="type">string</span>, <span class="variable">viejoValor</span>: <span class="type">string</span>) {
+  <span class="function">console</span>.log(<span class="string">`Antes: ${viejoValor}, Ahora: ${nuevoValor}`</span>);
+}
+        </code></pre>
+        <p>
+          Es útil para validar o sincronizar propiedades cuando cambian.
+        </p>
+      </section>
+
+      <section>
+        <h2>Resumen visual</h2>
+        <ul>
+          <li><code class="inline-code">@Prop()</code>: propiedades públicas</li>
+          <li><code class="inline-code">@State()</code>: estado interno reactivo</li>
+          <li><code class="inline-code">@Event()</code>: comunicación mediante eventos</li>
+          <li><code class="inline-code">@Method()</code>: métodos accesibles desde el exterior</li>
+          <li><code class="inline-code">@Watch()</code>: observar cambios de propiedades</li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un componente llamado <code class="inline-code">&lt;contador-simple&gt;</code> que:
+        </p>
+        <ul>
+          <li>Tenga un <code class="inline-code">@State()</code> llamado <code class="inline-code">valor</code></li>
+          <li>Tenga un botón que incremente el valor</li>
+          <li>Emita un <code class="inline-code">@Event()</code> llamado <code class="inline-code">onIncrement</code></li>
+          <li>Exponga un <code class="inline-code">@Method()</code> llamado <code class="inline-code">resetear()</code> que lo ponga a 0</li>
+        </ul>
+        <p>
+          Añade un <code class="inline-code">@Watch()</code> para mostrar en consola cada cambio de valor.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+</html>
