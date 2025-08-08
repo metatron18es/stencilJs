@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Capítulo 15 – Buenas prácticas y accesibilidad</title>
+  <title>Capítulo 14 – Buenas prácticas</title>
   <link rel="stylesheet" href="./css/general.css" />
   <link rel="stylesheet" href="./css/prism.css" />
 </head>
@@ -27,141 +27,145 @@
           <li><a href="capitulo11.html">11. Librerías escalables</a></li>
           <li><a href="capitulo12.html">12. Storybook</a></li>
           <li><a href="capitulo13.html">13. Publicación</a></li>
-          <li><a href="capitulo14.html">14. Composición avanzada</a></li>
-          <li><a href="capitulo15.html" class="active">15. Buenas prácticas</a></li>
-          <li><a href="capitulo16.html">16. Proyecto final</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
         </ul>
       </nav>
     </aside>
 
     <main class="content">
-      <h1>Capítulo 15: Buenas prácticas y accesibilidad</h1>
+      <h1>Capítulo 14: Buenas prácticas</h1>
 
       <section>
-        <h2>Buenas prácticas generales en Stencil</h2>
-        <ul>
-          <li>✅ Mantén componentes pequeños y enfocados (single responsibility)</li>
-          <li>✅ Usa nombres semánticos y claros</li>
-          <li>✅ Usa <code class="inline-code">@Prop()</code> para entrada, <code class="inline-code">@Event()</code> para salida</li>
-          <li>✅ Prefiere <code class="inline-code">shadow: true</code> salvo que necesites estilos globales</li>
-          <li>✅ Agrupa componentes relacionados por dominio funcional</li>
-          <li>🚫 No mezcles lógica de negocio con presentación visual</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Principios de accesibilidad</h2>
-        <p>Accesibilidad (a11y) significa que tu aplicación puede ser usada por personas con discapacidad. Todo componente debe cumplir con:</p>
-        <ul>
-          <li>👁️ Ser legible (contraste)</li>
-          <li>⌨️ Ser navegable por teclado</li>
-          <li>🔊 Ser usable por lectores de pantalla</li>
-          <li>🧠 Tener un orden lógico de foco y contenido</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Navegación por teclado</h2>
+        <h2>🎯 Objetivo</h2>
         <p>
-          Asegúrate de que los elementos interactivos puedan enfocarse y responder a eventos como <code class="inline-code">keydown</code>, <code class="inline-code">Enter</code> o <code class="inline-code">Space</code>.
-        </p>
-        <pre><code class="language-tsx">
-<span class="tag">&lt;button</span> <span class="attr-name">tabindex</span>=<span class="string">"0"</span> <span class="attr-name">onKeyDown</span>=<span class="string">"{handleKey}"</span><span class="tag">&gt;</span>
-  Enviar
-<span class="tag">&lt;/button&gt;</span>
-        </code></pre>
-        <p>Evita usar solo <code class="inline-code">div</code> para cosas clicables. Usa <code class="inline-code">button</code> o añade <code class="inline-code">role="button"</code>.</p>
-      </section>
-
-      <section>
-        <h2>Atributos y roles ARIA</h2>
-        <p>Los <strong>atributos ARIA</strong> mejoran la comprensión semántica para tecnologías asistidas:</p>
-        <ul>
-          <li><code class="inline-code">aria-label</code>: descripción textual</li>
-          <li><code class="inline-code">aria-hidden="true"</code>: ignora un nodo</li>
-          <li><code class="inline-code">role="dialog"</code>: semántica de diálogo</li>
-          <li><code class="inline-code">aria-expanded</code>: estados de colapsado</li>
-          <li><code class="inline-code">aria-checked</code>, <code class="inline-code">aria-pressed</code>: estados interactivos</li>
-        </ul>
-        <p>Úsalos cuando el HTML por sí solo no sea suficientemente informativo.</p>
-      </section>
-
-      <section>
-        <h2>Contraste y visibilidad</h2>
-        <p>
-          Asegúrate de que el texto tiene contraste suficiente con el fondo. El nivel mínimo recomendado es AA (4.5:1).
-        </p>
-        <p>
-          También debe haber <strong>indicadores de foco</strong> claros. No los ocultes con <code class="inline-code">outline: none</code>.
+          Este capítulo recoge un conjunto de buenas prácticas para escribir componentes Stencil.js limpios, mantenibles, eficientes y fácilmente integrables en cualquier entorno.
         </p>
       </section>
 
       <section>
-        <h2>Componentes accesibles en Stencil</h2>
-
-        <h3>Botón personalizado accesible</h3>
-        <pre><code class="language-tsx">
-<span class="comment">// mi-boton.tsx</span>
-render() {
-  <span class="keyword">return</span> (
-    <span class="tag">&lt;button</span> 
-      class="btn" 
-      role="button" 
-      aria-label={this.texto}
-    <span class="tag">&gt;</span>
-      {this.texto}
-    <span class="tag">&lt;/button&gt;</span>
-  );
-}
-        </code></pre>
-
-        <h3>Modal accesible</h3>
+        <h2>🏗️ Organización del proyecto</h2>
         <ul>
-          <li>Usa <code class="inline-code">role="dialog"</code></li>
-          <li>Incluye <code class="inline-code">aria-modal="true"</code> y <code class="inline-code">aria-labelledby</code></li>
-          <li>Captura <code class="inline-code">Escape</code> para cerrar</li>
-          <li>Devuelve el foco al elemento previo</li>
-        </ul>
-
-        <h3>Input accesible</h3>
-        <p>Asocia siempre un <code class="inline-code">label</code> con su <code class="inline-code">input</code> usando <code class="inline-code">for</code> + <code class="inline-code">id</code> o <code class="inline-code">aria-labelledby</code>.</p>
-      </section>
-
-      <section>
-        <h2>Testing de accesibilidad</h2>
-        <ul>
-          <li><strong>Lighthouse</strong>: en Chrome DevTools</li>
-          <li><strong>Axe DevTools</strong>: extensión para navegadores</li>
-          <li><strong>NVDA / VoiceOver</strong>: lectores de pantalla reales</li>
-          <li><strong>Teclado</strong>: prueba con <kbd>Tab</kbd>, <kbd>Enter</kbd>, <kbd>Escape</kbd></li>
+          <li>Usa una carpeta por componente: <code class="inline-code">mi-componente/</code></li>
+          <li>Incluye archivo `.tsx`, `.css` y `.spec.ts` en cada componente</li>
+          <li>Evita carpetas anidadas innecesarias</li>
         </ul>
       </section>
 
       <section>
-        <h2>Resumen de buenas prácticas</h2>
+        <h2>📦 Diseño de componentes</h2>
         <ul>
-          <li>✅ Usa semántica HTML siempre que sea posible</li>
-          <li>✅ Gestiona el foco correctamente</li>
-          <li>✅ Usa ARIA solo como complemento</li>
-          <li>✅ Prueba tus componentes con teclado y lectores</li>
-          <li>✅ Documenta accesibilidad en Storybook o README</li>
+          <li>Un componente debe hacer una sola cosa (<strong>Single Responsibility</strong>)</li>
+          <li>Prefiere la composición antes que la herencia</li>
+          <li>Evita componentes con lógica excesiva</li>
+          <li>Reutiliza componentes pequeños en lugar de duplicar estructura</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧠 Props y atributos</h2>
+        <ul>
+          <li>Usa <code class="inline-code">@Prop()</code> solo para datos que vienen del exterior</li>
+          <li>Marca como <code class="inline-code">readonly</code> si no deben modificarse</li>
+          <li>Evita usar props como variables internas (usa <code class="inline-code">@State()</code>)</li>
+          <li>Usa <code class="inline-code">reflect</code> solo si es necesario sincronizar con el DOM</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>💬 Comunicación entre componentes</h2>
+        <ul>
+          <li>Prefiere <code class="inline-code">@Event()</code> para comunicar de hijo a padre</li>
+          <li>Evita pasar funciones como props (excepto en casos muy concretos)</li>
+          <li>Utiliza contextos o stores compartidos para estados globales</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🎨 Estilos y Shadow DOM</h2>
+        <ul>
+          <li>Usa el encapsulamiento por defecto (<code class="inline-code">shadow: true</code>)</li>
+          <li>Evita usar estilos globales dentro de los componentes</li>
+          <li>No dependas de clases globales externas</li>
+          <li>Importa solo el CSS necesario en cada componente</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧪 Testing</h2>
+        <ul>
+          <li>Incluye al menos un test básico por componente</li>
+          <li>Prueba renderizado, propiedades y eventos</li>
+          <li>Usa snapshots con moderación (cuando realmente aporten valor)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧹 Código limpio y mantenible</h2>
+        <ul>
+          <li>Aplica <strong>naming conventions</strong> consistentes</li>
+          <li>Usa <code class="inline-code">private</code> para métodos internos</li>
+          <li>Elimina código muerto y <code class="inline-code">console.log</code> al hacer <code class="inline-code">build</code></li>
+          <li>Documenta tus props y eventos usando JSDoc</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🚀 Rendimiento</h2>
+        <ul>
+          <li>Evita re-renderizados innecesarios</li>
+          <li>Minimiza el uso de <code class="inline-code">@Watch</code> salvo que sea imprescindible</li>
+          <li>Prefiere datos primitivos en props antes que objetos complejos</li>
+          <li>Usa <code class="inline-code">lazy-loading</code> para componentes pesados</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>📚 Documentación y Storybook</h2>
+        <ul>
+          <li>Añade historias en Storybook para todos los estados del componente</li>
+          <li>Usa controles y args para mostrar la flexibilidad del componente</li>
+          <li>Documenta casos de uso reales y cómo integrarlos</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🌍 Publicación</h2>
+        <ul>
+          <li>Incluye solo los archivos necesarios en <code class="inline-code">package.json</code> (usando <code class="inline-code">files</code>)</li>
+          <li>Valida que la build funcione antes de publicar</li>
+          <li>Evita hacer cambios mayores sin versión semántica (<code class="inline-code">semver</code>)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🛠️ Herramientas recomendadas</h2>
+        <ul>
+          <li><strong>ESLint</strong>: para mantener consistencia de código</li>
+          <li><strong>Prettier</strong>: para formateo automático</li>
+          <li><strong>Commitlint</strong>: para mensajes de commit semánticos</li>
+          <li><strong>Husky + Lint-staged</strong>: para validaciones en pre-commit</li>
         </ul>
       </section>
 
       <section class="exercise">
         <h3>🧠 Ejercicio práctico</h3>
-        <p>Crea un componente <code class="inline-code">&lt;modal-a11y&gt;</code> con:</p>
+        <p>
+          Revisa todos tus componentes y corrige lo siguiente:
+        </p>
         <ul>
-          <li>Prop <code class="inline-code">abierto</code> para mostrar/ocultar</li>
-          <li><code class="inline-code">role="dialog"</code>, <code class="inline-code">aria-modal="true"</code></li>
-          <li><code class="inline-code">aria-labelledby</code> que apunte a un <code class="inline-code">&lt;h2&gt;</code></li>
-          <li>Captura de tecla <code class="inline-code">Escape</code></li>
-          <li>Retorno del foco al elemento que lo activó</li>
+          <li>Aplica <code class="inline-code">shadow: true</code> si no está activo</li>
+          <li>Divide componentes grandes en piezas más pequeñas</li>
+          <li>Elimina código sin uso y asegura un test por componente</li>
+          <li>Agrega documentación a cada propiedad y evento</li>
         </ul>
       </section>
     </main>
   </div>
 
-  <script src="./js/menu.js"></script>
+  <footer class="footer">
+  <p>&copy; 2025 Curso Avanzado de Stencil.js. Creado por Roberto de la Casa. Todos los derechos reservados.</p>
+</footer>
+<script src="./js/menu.js"></script>
 </body>
 </html>
