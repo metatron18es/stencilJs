@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 9 – Testing avanzado</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 9: Testing avanzado</h1>
+
+      <section>
+        <h2>🧪 ¿Qué herramientas usa Stencil para testing?</h2>
+        <p>
+          Stencil.js usa <code class="inline-code">Jest</code> como entorno de pruebas por defecto. Puedes realizar tests:
+        </p>
+        <ul>
+          <li><strong>Unitarios</strong>: lógica interna del componente</li>
+          <li><strong>De integración</strong>: renderizado, eventos, slots, etc.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>📁 Estructura de los tests</h2>
+        <p>
+          Por convención, los tests van junto al componente con extensión <code class="inline-code">.spec.tsx</code>:
+        </p>
+        <pre><code class="language-bash">
+mi-componente/
+├── mi-componente.tsx
+├── mi-componente.css
+└── mi-componente.spec.tsx
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🔍 Test unitario básico</h2>
+        <p>Probamos que el componente se renderiza correctamente:</p>
+        <pre><code class="language-ts">
+<span class="keyword">import</span> { newSpecPage } <span class="keyword">from</span> <span class="string">'@stencil/core/testing'</span>;
+<span class="keyword">import</span> { SaludoPersonal } <span class="keyword">from</span> <span class="string">'./saludo-personal'</span>;
+
+<span class="function">describe</span>('saludo-personal', () => {
+  <span class="function">it</span>('renderiza por defecto', <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> page = <span class="keyword">await</span> newSpecPage({
+      components: [SaludoPersonal],
+      html: <span class="string">'&lt;saludo-personal&gt;&lt;/saludo-personal&gt;'</span>,
+    });
+
+    <span class="function">expect</span>(page.root).toBeTruthy();
+    <span class="function">expect</span>(page.root.textContent).toContain(<span class="string">'Hola, visitante'</span>);
+  });
+});
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🔁 Test con props</h2>
+        <pre><code class="language-ts">
+<span class="function">it</span>('muestra el nombre pasado como prop', <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> page = <span class="keyword">await</span> newSpecPage({
+    components: [SaludoPersonal],
+    html: <span class="string">'&lt;saludo-personal nombre="Ana"&gt;&lt;/saludo-personal&gt;'</span>,
+  });
+
+  <span class="function">expect</span>(page.root.textContent).toContain(<span class="string">'Hola, Ana'</span>);
+});
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🧠 Test con eventos</h2>
+        <p>También puedes comprobar si un componente emite eventos:</p>
+        <pre><code class="language-ts">
+<span class="function">it</span>('emite el evento clic-personalizado', <span class="keyword">async</span> () => {
+  <span class="keyword">const</span> page = <span class="keyword">await</span> newSpecPage({
+    components: [MiBoton],
+    html: <span class="string">'&lt;mi-boton&gt;&lt;/mi-boton&gt;'</span>,
+  });
+
+  <span class="keyword">const</span> event = <span class="keyword">jest</span>.fn();
+  page.root.addEventListener(<span class="string">'clic-personalizado'</span>, event);
+
+  page.root.click();
+  <span class="function">expect</span>(event).toHaveBeenCalled();
+});
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>💡 Consejos útiles</h2>
+        <ul>
+          <li>Usa <code class="inline-code">@State()</code> y <code class="inline-code">@Prop()</code> como base para verificar cambios</li>
+          <li>Verifica contenido con <code class="inline-code">textContent</code> o <code class="inline-code">innerHTML</code></li>
+          <li>Simula eventos con <code class="inline-code">click()</code> o <code class="inline-code">dispatchEvent</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🚀 Ejecutar los tests</h2>
+        <p>Usa el siguiente comando para correr todos los tests del proyecto:</p>
+        <pre><code class="language-bash">
+npm test
+        </code></pre>
+        <p>También puedes lanzar Jest en modo interactivo:</p>
+        <pre><code class="language-bash">
+npm run test.watch
+        </code></pre>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Crea un test para un componente <code class="inline-code">&lt;contador-clics&gt;</code> que:
+        </p>
+        <ul>
+          <li>Tenga un botón</li>
+          <li>Al hacer clic, incremente un número</li>
+          <li>Compruebe el contenido antes y después del clic</li>
+          <li>Simule el clic con <code class="inline-code">page.root.querySelector('button').click()</code></li>
+        </ul>
+        <p>
+          Bonus: verifica que el número inicial es 0 y el nuevo valor es 1 tras el clic.
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+  <p>&copy; 2025 Curso Avanzado de Stencil.js. Creado por Roberto de la Casa. Todos los derechos reservados.</p>
+</footer>
+<script src="./js/menu.js"></script>
+</body>
+</html>

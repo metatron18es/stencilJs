@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 14 – Composición avanzada de componentes</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html" class="active">14. Composición avanzada</a></li>
+          <li><a href="capitulo15.html">15. Buenas prácticas</a></li>
+          <li><a href="capitulo16.html">16. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 14: Composición avanzada de componentes</h1>
+
+      <section>
+        <h2>¿Qué es la composición?</h2>
+        <p>
+          La <strong>composición</strong> es el principio de construir interfaces complejas combinando componentes pequeños, reutilizables y especializados. En lugar de heredar comportamiento, se ensamblan elementos que colaboran.
+        </p>
+        <p>
+          En Stencil (y Web Components en general), la composición se apoya en el uso de <code class="inline-code">&lt;slot&gt;</code>, propiedades, eventos y renderizado condicional.
+        </p>
+      </section>
+
+      <section>
+        <h2>Uso avanzado de slots</h2>
+        <p>
+          Ya conoces el uso básico del <code class="inline-code">&lt;slot&gt;</code>. Veamos técnicas más avanzadas.
+        </p>
+
+        <h3>1. Slots con nombre</h3>
+        <p>
+          Permiten insertar contenido en ubicaciones específicas del componente.
+        </p>
+        <pre><code class="language-tsx">
+<span class="comment">// tarjeta-usuario.tsx</span>
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      <span class="tag">&lt;slot name="avatar"&gt;&lt;/slot&gt;</span>
+      <span class="tag">&lt;slot name="info"&gt;&lt;/slot&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+        </code></pre>
+
+        <pre><code class="language-html">
+<span class="tag">&lt;tarjeta-usuario&gt;</span>
+  <span class="tag">&lt;img</span> <span class="attr-name">slot</span>=<span class="string">"avatar"</span> <span class="attr-name">src</span>=<span class="string">"foto.jpg"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attr-name">slot</span>=<span class="string">"info"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Roberto<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/tarjeta-usuario&gt;</span>
+        </code></pre>
+
+        <h3>2. Slots dinámicos</h3>
+        <p>
+          Puedes renderizar slots condicionalmente:
+        </p>
+        <pre><code class="language-tsx">
+<span class="keyword">render</span>() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;div&gt;</span>
+      {this.mostrarImagen && <span class="tag">&lt;slot name="imagen" /&gt;</span>}
+      <span class="tag">&lt;slot /&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  );
+}
+        </code></pre>
+
+        <p>
+          Esto te permite modificar la estructura interna del componente en función de props o estado.
+        </p>
+      </section>
+
+      <section>
+        <h2>Componentes envoltorio (HOC)</h2>
+        <p>
+          Puedes crear componentes que simplemente "envuelven" a otros para añadir funcionalidad, sin duplicar lógica.
+        </p>
+
+        <p><strong>Ejemplo:</strong> un envoltorio que añade una cabecera estándar:</p>
+
+        <pre><code class="language-tsx">
+<span class="comment">// envoltorio-estandar.tsx</span>
+<span class="decorator">@Component</span>({ tag: 'envoltorio-estandar', shadow: true })
+<span class="keyword">export class</span> <span class="class-name">EnvoltorioEstandar</span> {
+  render() {
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;header&gt;</span>🌟 Mi App<span class="tag">&lt;/header&gt;</span>
+        <span class="tag">&lt;main&gt;&lt;slot /&gt;&lt;/main&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    );
+  }
+}
+        </code></pre>
+
+        <p>Y luego se usa así:</p>
+        <pre><code class="language-html">
+<span class="tag">&lt;envoltorio-estandar&gt;</span>
+  <span class="tag">&lt;pagina-principal&gt;&lt;/pagina-principal&gt;</span>
+<span class="tag">&lt;/envoltorio-estandar&gt;</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Composición basada en props</h2>
+        <p>
+          Puedes crear componentes altamente configurables usando solo props. Ejemplo: un componente <code class="inline-code">boton-ui</code> que cambia de estilo y comportamiento según props.
+        </p>
+
+        <pre><code class="language-tsx">
+<span class="comment">// boton-ui.tsx</span>
+render() {
+  <span class="keyword">return</span> (
+    <span class="tag">&lt;button</span> 
+      class={`btn ${this.tipo}`} 
+      onClick={this.onClick}
+    <span class="tag">&gt;</span>
+      {this.texto}
+    <span class="tag">&lt;/button&gt;</span>
+  );
+}
+        </code></pre>
+
+        <p>Y se usa como:</p>
+        <pre><code class="language-html">
+<span class="tag">&lt;boton-ui</span> <span class="attr-name">tipo</span>=<span class="string">"primario"</span> <span class="attr-name">texto</span>=<span class="string">"Aceptar"</span><span class="tag">&gt;&lt;/boton-ui&gt;</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Micro frontends con Stencil</h2>
+        <p>
+          Stencil es ideal para arquitecturas de <strong>micro frontends</strong> porque sus componentes se pueden usar de forma independiente.
+        </p>
+
+        <p><strong>Ventajas:</strong></p>
+        <ul>
+          <li>📦 Cada componente puede tener su propio ciclo de vida y deploy</li>
+          <li>🚀 Pueden coexistir con React, Vue o Angular en la misma app</li>
+          <li>🔧 Se pueden servir desde un CDN o cargar dinámicamente</li>
+        </ul>
+
+        <p><strong>Recomendaciones:</strong></p>
+        <ul>
+          <li>Exporta componentes con <code class="inline-code">defineCustomElements()</code> desde el loader</li>
+          <li>Usa <code class="inline-code">shadow: true</code> para evitar conflictos de estilo</li>
+          <li>Evita dependencias pesadas en los bundles individuales</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Limitaciones y buenas prácticas</h2>
+        <ul>
+          <li>❌ No se puede pasar JSX como slot (Stencil no lo admite directamente)</li>
+          <li>⚠️ Usa slots por nombre si necesitas estructuras complejas</li>
+          <li>✔️ Aprovecha render condicional y composición con props para máxima flexibilidad</li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>Crea un componente <code class="inline-code">&lt;contenedor-tarjeta&gt;</code> que reciba:</p>
+        <ul>
+          <li>✔️ Un slot principal para contenido</li>
+          <li>✔️ Un slot con nombre <code class="inline-code">"icono"</code> que aparezca a la izquierda</li>
+          <li>✔️ Una prop <code class="inline-code">colorFondo</code> para cambiar el fondo</li>
+        </ul>
+        <p>Úsalo con contenido dinámico dentro de otro componente.</p>
+      </section>
+    </main>
+  </div>
+
+  <script src="./js/menu.js"></script>
+</body>
+</html>

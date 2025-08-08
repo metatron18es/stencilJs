@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 14 – Buenas prácticas</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 14: Buenas prácticas</h1>
+
+      <section>
+        <h2>🎯 Objetivo</h2>
+        <p>
+          Este capítulo recoge un conjunto de buenas prácticas para escribir componentes Stencil.js limpios, mantenibles, eficientes y fácilmente integrables en cualquier entorno.
+        </p>
+      </section>
+
+      <section>
+        <h2>🏗️ Organización del proyecto</h2>
+        <ul>
+          <li>Usa una carpeta por componente: <code class="inline-code">mi-componente/</code></li>
+          <li>Incluye archivo `.tsx`, `.css` y `.spec.ts` en cada componente</li>
+          <li>Evita carpetas anidadas innecesarias</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>📦 Diseño de componentes</h2>
+        <ul>
+          <li>Un componente debe hacer una sola cosa (<strong>Single Responsibility</strong>)</li>
+          <li>Prefiere la composición antes que la herencia</li>
+          <li>Evita componentes con lógica excesiva</li>
+          <li>Reutiliza componentes pequeños en lugar de duplicar estructura</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧠 Props y atributos</h2>
+        <ul>
+          <li>Usa <code class="inline-code">@Prop()</code> solo para datos que vienen del exterior</li>
+          <li>Marca como <code class="inline-code">readonly</code> si no deben modificarse</li>
+          <li>Evita usar props como variables internas (usa <code class="inline-code">@State()</code>)</li>
+          <li>Usa <code class="inline-code">reflect</code> solo si es necesario sincronizar con el DOM</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>💬 Comunicación entre componentes</h2>
+        <ul>
+          <li>Prefiere <code class="inline-code">@Event()</code> para comunicar de hijo a padre</li>
+          <li>Evita pasar funciones como props (excepto en casos muy concretos)</li>
+          <li>Utiliza contextos o stores compartidos para estados globales</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🎨 Estilos y Shadow DOM</h2>
+        <ul>
+          <li>Usa el encapsulamiento por defecto (<code class="inline-code">shadow: true</code>)</li>
+          <li>Evita usar estilos globales dentro de los componentes</li>
+          <li>No dependas de clases globales externas</li>
+          <li>Importa solo el CSS necesario en cada componente</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧪 Testing</h2>
+        <ul>
+          <li>Incluye al menos un test básico por componente</li>
+          <li>Prueba renderizado, propiedades y eventos</li>
+          <li>Usa snapshots con moderación (cuando realmente aporten valor)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧹 Código limpio y mantenible</h2>
+        <ul>
+          <li>Aplica <strong>naming conventions</strong> consistentes</li>
+          <li>Usa <code class="inline-code">private</code> para métodos internos</li>
+          <li>Elimina código muerto y <code class="inline-code">console.log</code> al hacer <code class="inline-code">build</code></li>
+          <li>Documenta tus props y eventos usando JSDoc</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🚀 Rendimiento</h2>
+        <ul>
+          <li>Evita re-renderizados innecesarios</li>
+          <li>Minimiza el uso de <code class="inline-code">@Watch</code> salvo que sea imprescindible</li>
+          <li>Prefiere datos primitivos en props antes que objetos complejos</li>
+          <li>Usa <code class="inline-code">lazy-loading</code> para componentes pesados</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>📚 Documentación y Storybook</h2>
+        <ul>
+          <li>Añade historias en Storybook para todos los estados del componente</li>
+          <li>Usa controles y args para mostrar la flexibilidad del componente</li>
+          <li>Documenta casos de uso reales y cómo integrarlos</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🌍 Publicación</h2>
+        <ul>
+          <li>Incluye solo los archivos necesarios en <code class="inline-code">package.json</code> (usando <code class="inline-code">files</code>)</li>
+          <li>Valida que la build funcione antes de publicar</li>
+          <li>Evita hacer cambios mayores sin versión semántica (<code class="inline-code">semver</code>)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🛠️ Herramientas recomendadas</h2>
+        <ul>
+          <li><strong>ESLint</strong>: para mantener consistencia de código</li>
+          <li><strong>Prettier</strong>: para formateo automático</li>
+          <li><strong>Commitlint</strong>: para mensajes de commit semánticos</li>
+          <li><strong>Husky + Lint-staged</strong>: para validaciones en pre-commit</li>
+        </ul>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Revisa todos tus componentes y corrige lo siguiente:
+        </p>
+        <ul>
+          <li>Aplica <code class="inline-code">shadow: true</code> si no está activo</li>
+          <li>Divide componentes grandes en piezas más pequeñas</li>
+          <li>Elimina código sin uso y asegura un test por componente</li>
+          <li>Agrega documentación a cada propiedad y evento</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+  <p>&copy; 2025 Curso Avanzado de Stencil.js. Creado por Roberto de la Casa. Todos los derechos reservados.</p>
+</footer>
+<script src="./js/menu.js"></script>
+</body>
+</html>
