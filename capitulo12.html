@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 12 – Storybook</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 12: Storybook</h1>
+
+      <section>
+        <h2>📚 ¿Qué es Storybook?</h2>
+        <p>
+          Storybook es una herramienta para desarrollar componentes de interfaz de usuario de forma aislada. Permite
+          previsualizarlos, testearlos visualmente, documentarlos e interactuar con sus propiedades (props, eventos,
+          slots, etc.) sin necesidad de ejecutar toda tu aplicación.
+        </p>
+      </section>
+
+      <section>
+        <h2>🎯 Beneficios de usar Storybook con Stencil</h2>
+        <ul>
+          <li>Visualización aislada de cada componente</li>
+          <li>Documentación interactiva y viva</li>
+          <li>Exploración de argumentos (props) con controles</li>
+          <li>Simulación de eventos y pruebas manuales</li>
+          <li>Facilidad para compartir y testear en equipo</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>⚙️ Instalación avanzada</h2>
+        <p>Ejecuta la instalación y el setup inicial:</p>
+        <pre><code class="language-bash">
+npx storybook@latest init
+        </code></pre>
+        <p>Selecciona <code class="inline-code">Web Components</code> como framework base.</p>
+
+        <p>Instala también los addons necesarios:</p>
+        <pre><code class="language-bash">
+npm install @storybook/addon-essentials @storybook/web-components-vite --save-dev
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>📁 Estructura recomendada</h2>
+        <pre><code class="language-bash">
+.storybook/
+├── main.js          # Configuración base
+├── preview.js       # Configuración global (estilos, decoradores...)
+stories/
+├── mi-boton.stories.ts
+├── tarjeta-user.stories.ts
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🔧 Configuración de <code class="inline-code">main.js</code></h2>
+        <pre><code class="language-js">
+<span class="keyword">module.exports</span> = {
+  stories: [<span class="string">'../stories/**/*.stories.ts'</span>],
+  addons: [
+    <span class="string">'@storybook/addon-essentials'</span>,
+  ],
+  framework: {
+    name: <span class="string">'@storybook/web-components-vite'</span>,
+    options: {}
+  }
+};
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🧱 Estructura de una historia</h2>
+        <p>Ejemplo básico:</p>
+        <pre><code class="language-ts">
+// stories/mi-boton.stories.ts
+
+<span class="keyword">export default</span> {
+  title: <span class="string">'Componentes/MiBoton'</span>,
+  tags: [<span class="string">'autodocs'</span>],
+  argTypes: {
+    texto: { control: 'text' },
+    color: { control: 'select', options: ['primario', 'secundario'] },
+    deshabilitado: { control: 'boolean' },
+  }
+};
+
+<span class="keyword">const</span> <span class="function">Template</span> = (args) => {
+  <span class="keyword">return</span> <span class="string">`&lt;mi-boton texto="${args.texto}" color="${args.color}" ?deshabilitado="${args.deshabilitado}"&gt;&lt;/mi-boton&gt;`</span>;
+};
+
+<span class="keyword">export const</span> <span class="function">PorDefecto</span> = Template.bind({});
+PorDefecto.args = {
+  texto: <span class="string">'Aceptar'</span>,
+  color: <span class="string">'primario'</span>,
+  deshabilitado: <span class="keyword">false</span>,
+};
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🎛️ ArgTypes y controles interactivos</h2>
+        <p>Define en <code class="inline-code">argTypes</code> cómo se renderiza cada control en la interfaz:</p>
+        <ul>
+          <li><strong>text</strong>: cadenas de texto</li>
+          <li><strong>boolean</strong>: checkbox</li>
+          <li><strong>select</strong>: menú desplegable</li>
+          <li><strong>color</strong>: selector de color</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🎨 Aplicar estilos globales</h2>
+        <p>En <code class="inline-code">.storybook/preview.js</code> puedes importar CSS general:</p>
+        <pre><code class="language-js">
+import '../src/global/estilos.css';
+        </code></pre>
+        <p>También puedes usar <code class="inline-code">decorators</code> para envolver todos los componentes:</p>
+        <pre><code class="language-js">
+<span class="keyword">export const</span> decorators = [
+  (story) => <span class="string">`&lt;div style="padding: 2em;"&gt;${story()}&lt;/div&gt;`</span>,
+];
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🧪 Escuchar eventos personalizados</h2>
+        <p>Puedes capturar eventos con <code class="inline-code">action()</code>:</p>
+        <pre><code class="language-ts">
+import { action } from '@storybook/addon-actions';
+
+<span class="keyword">const</span> Template = () => {
+  <span class="keyword">const</span> boton = document.createElement('mi-boton');
+  boton.addEventListener('click', action('click personalizado'));
+  <span class="keyword">return</span> boton;
+};
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>🧩 Addons recomendados</h2>
+        <ul>
+          <li><strong>@storybook/addon-a11y</strong>: validación de accesibilidad</li>
+          <li><strong>@storybook/addon-actions</strong>: visualizar eventos</li>
+          <li><strong>@storybook/addon-controls</strong>: controles de props</li>
+          <li><strong>@storybook/addon-docs</strong>: documentación automática</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>📦 Integración con Stencil.js</h2>
+        <p>Importa los componentes dentro de Storybook:</p>
+        <pre><code class="language-ts">
+import { defineCustomElements } from '../dist/loader';
+defineCustomElements();
+        </code></pre>
+        <p>Asegúrate de que la build de Stencil esté generada con <code class="inline-code">npm run build</code>.</p>
+      </section>
+
+      <section>
+        <h2>🔬 Historias con slots y contenido dinámico</h2>
+        <p>Puedes inyectar contenido dentro de slots:</p>
+        <pre><code class="language-ts">
+<span class="keyword">const</span> SlotTemplate = () => {
+  <span class="keyword">return</span> <span class="string">`
+    &lt;tarjeta-user nombre="Lucía"&gt;
+      &lt;span slot="footer"&gt;Pie de tarjeta&lt;/span&gt;
+    &lt;/tarjeta-user&gt;
+  `</span>;
+};
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>📦 Integrar Storybook y Stencil en el mismo repositorio</h2>
+        <p>
+          Puedes mantener tanto Stencil como Storybook en el mismo repositorio sin problema. Lo más habitual es
+          colocarlos en la raíz del proyecto, con una estructura como esta:
+        </p>
+        <pre><code class="language-bash">
+mi-proyecto/
+├── src/                      # Componentes Stencil
+├── dist/                    # Output compilado de Stencil
+├── stories/                 # Historias de Storybook
+├── .storybook/              # Configuración de Storybook
+├── stencil.config.ts        # Configuración de Stencil
+├── tsconfig.json
+├── package.json
+  </code></pre>
+
+        <p>Para que Storybook reconozca tus componentes:</p>
+        <ol>
+          <li>Primero, compila Stencil con <code class="inline-code">npm run build</code>.</li>
+          <li>Luego, importa los componentes en <code class="inline-code">preview.js</code> o en cada historia:</li>
+        </ol>
+        <pre><code class="language-ts">
+// .storybook/preview.js o en cada archivo .stories.ts
+
+import { defineCustomElements } from '../dist/loader';
+defineCustomElements();
+  </code></pre>
+
+        <p>
+          Esto asegura que los Web Components generados por Stencil estén disponibles en las historias de Storybook, sin
+          necesidad de copiarlos manualmente.
+        </p>
+
+        <h3>🔁 Automatizar el proceso</h3>
+        <p>Puedes crear un script combinado en <code class="inline-code">package.json</code> para compilar y ejecutar
+          Storybook de una vez:</p>
+        <pre><code class="language-json">
+"scripts": {
+  "build": "stencil build",
+  "storybook": "storybook dev -p 6006",
+  "storybook:start": "npm run build && npm run storybook"
+}
+  </code></pre>
+
+        <p>Así aseguras que Storybook siempre tenga la build de Stencil lista antes de arrancar.</p>
+
+        <h3>📁 Ubicación recomendada de historias</h3>
+        <p>Para una mejor organización, puedes tener tus historias junto a los propios componentes:</p>
+        <pre><code class="language-bash">
+src/components/mi-boton/
+├── mi-boton.tsx
+├── mi-boton.css
+├── mi-boton.stories.ts   # Historia del componente
+  </code></pre>
+        <p>Solo asegúrate de actualizar <code class="inline-code">main.js</code> de Storybook con la ruta correcta:</p>
+        <pre><code class="language-js">
+stories: ['../src/components/**/*.stories.ts']
+  </code></pre>
+      </section>
+
+
+      <section>
+        <h2>⚡ Consejos para historias mantenibles</h2>
+        <ul>
+          <li>Utiliza una función <code class="inline-code">Template</code> reutilizable por historia</li>
+          <li>Separa historias por componente (uno por archivo)</li>
+          <li>Documenta casos de uso comunes</li>
+          <li>No pongas lógica en el HTML: usa props controladas</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🚀 Ejecutar Storybook</h2>
+        <pre><code class="language-bash">
+npm run storybook
+        </code></pre>
+        <p>Esto abrirá Storybook en <code class="inline-code">http://localhost:6006</code>.</p>
+      </section>
+
+      <section class="exercise">
+        <h3>🧠 Ejercicio práctico</h3>
+        <p>
+          Configura Storybook para tu librería de componentes y crea las siguientes historias:
+        </p>
+        <ul>
+          <li><strong>&lt;mi-boton&gt;</strong> con controles de texto y color</li>
+          <li><strong>&lt;tarjeta-user&gt;</strong> que use slots y <code class="inline-code">args</code></li>
+          <li>Un decorador que envuelva los componentes en un <code class="inline-code">&lt;div&gt;</code> con padding
+          </li>
+          <li>Un listener de eventos con <code class="inline-code">@storybook/addon-actions</code></li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+  <p>&copy; 2025 Curso Avanzado de Stencil.js. Creado por Roberto de la Casa. Todos los derechos reservados.</p>
+</footer>
+<script src="./js/menu.js"></script>
+</body>
+
+</html>

@@ -110,4 +110,15 @@ h3 {
   z-index: 1001;
 }
 
-
+.footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.85em;
+  color: #888;
+  border-top: 1px solid #444;
+  background-color: #1e1e1e;
+}
+.footer p {
+  margin: 0;
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 15 – Proyecto final</title>
+  <link rel="stylesheet" href="./css/general.css" />
+  <link rel="stylesheet" href="./css/prism.css" />
+</head>
+<body>
+  <div class="layout">
+    <button id="menu-toggle" aria-label="Mostrar menú" class="menu-toggle">☰</button>
+    <aside class="sidebar">
+      <nav>
+        <h2>Índice</h2>
+        <ul>
+          <li><a href="capitulo1.html">1. Introducción</a></li>
+          <li><a href="capitulo2.html">2. Instalación y configuración</a></li>
+          <li><a href="capitulo3.html">3. Estructura de un componente</a></li>
+          <li><a href="capitulo4.html">4. Decoradores en profundidad</a></li>
+          <li><a href="capitulo5.html">5. Ciclo de vida</a></li>
+          <li><a href="capitulo6.html">6. Slots y Shadow DOM</a></li>
+          <li><a href="capitulo7.html">7. Comunicación entre componentes</a></li>
+          <li><a href="capitulo8.html">8. Integración con APIs</a></li>
+          <li><a href="capitulo9.html">9. Testing avanzado</a></li>
+          <li><a href="capitulo10.html">10. Optimización</a></li>
+          <li><a href="capitulo11.html">11. Librerías escalables</a></li>
+          <li><a href="capitulo12.html">12. Storybook</a></li>
+          <li><a href="capitulo13.html">13. Publicación</a></li>
+          <li><a href="capitulo14.html">14. Buenas prácticas</a></li>
+          <li><a href="capitulo15.html">15. Proyecto final</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="content">
+      <h1>Capítulo 15: Proyecto final</h1>
+
+      <section>
+        <h2>🎯 Objetivo</h2>
+        <p>Construir una librería de componentes Web funcional, reutilizable y bien documentada con Stencil.js. Se aplicará todo lo aprendido durante el curso.</p>
+      </section>
+
+      <section>
+        <h2>🧱 Requisitos mínimos</h2>
+        <p>Tu librería debe incluir:</p>
+        <ul>
+          <li>Al menos 4 componentes reutilizables</li>
+          <li>Estilos encapsulados (shadow DOM)</li>
+          <li>Props bien definidas y documentadas</li>
+          <li>Al menos un evento personalizado</li>
+          <li>Slots y uso del ciclo de vida</li>
+          <li>Test unitarios en cada componente</li>
+          <li>Historias en Storybook con controles</li>
+          <li>Build optimizada y publicada localmente</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>💡 Propuesta de componentes</h2>
+        <ul>
+          <li><code class="inline-code">&lt;mi-boton&gt;</code>: botón configurable con slots e iconos</li>
+          <li><code class="inline-code">&lt;mi-alerta&gt;</code>: alertas con diferentes variantes (<em>info</em>, <em>error</em>, etc.)</li>
+          <li><code class="inline-code">&lt;mi-tarjeta&gt;</code>: componente para mostrar contenido con estilo</li>
+          <li><code class="inline-code">&lt;mi-modal&gt;</code>: ventana modal controlada por props y eventos</li>
+        </ul>
+        <p>Puedes adaptarlos o crear los tuyos propios.</p>
+      </section>
+
+      <section>
+        <h2>📁 Estructura del proyecto</h2>
+        <pre><code class="language-bash">
+mi-ui/
+├── src/
+│   └── components/
+│       ├── mi-boton/
+│       ├── mi-alerta/
+│       ├── mi-tarjeta/
+│       └── mi-modal/
+├── dist/
+├── .storybook/
+├── www/
+├── package.json
+├── stencil.config.ts
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>📖 Documentación con Storybook</h2>
+        <ul>
+          <li>Incluye al menos una historia por estado del componente</li>
+          <li>Usa <code class="inline-code">args</code> y <code class="inline-code">argTypes</code></li>
+          <li>Documenta qué hace cada prop y evento</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🧪 Pruebas unitarias</h2>
+        <ul>
+          <li>Testea props y comportamiento interno</li>
+          <li>Simula eventos y verifica su emisión</li>
+          <li>Usa <code class="inline-code">@testing-library/stencil</code> o el setup estándar de Jest</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>🚀 Publicación local</h2>
+        <ol>
+          <li>Ejecuta <code class="inline-code">npm run build</code></li>
+          <li>Haz <code class="inline-code">npm pack</code> para generar el paquete</li>
+          <li>Instálalo en otro proyecto con <code class="inline-code">npm install ./mi-ui-1.0.0.tgz</code></li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>🌐 Despliegue opcional</h2>
+        <p>
+          Puedes desplegar tu documentación con Storybook en GitHub Pages, Vercel o Netlify para que sea accesible públicamente.
+        </p>
+      </section>
+
+      <section class="exercise">
+        <h3>🎓 Ejercicio final</h3>
+        <ol>
+          <li>Crea tu librería <strong>desde cero</strong> o parte del proyecto del curso</li>
+          <li>Diseña al menos 4 componentes reutilizables</li>
+          <li>Aplica decoradores, ciclo de vida, slots y eventos</li>
+          <li>Testea y documenta con Storybook</li>
+          <li>Empaqueta y prueba su publicación local</li>
+          <li>Entrega el repositorio o proyecto como prueba final del curso</li>
+        </ol>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+  <p>&copy; 2025 Curso Avanzado de Stencil.js. Creado por Roberto de la Casa. Todos los derechos reservados.</p>
+</footer>
+<script src="./js/menu.js"></script>
+</body>
+</html>
